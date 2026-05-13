@@ -2,7 +2,11 @@
 This document is the authoritative source of truth for backend API behavior.
 Any generated code must strictly follow the rules defined here.
 
+<<<<<<< HEAD
 REST API for booking system futsal realtime with Express.js dan PostgreSQL.
+=======
+REST API for a real-time futsal booking system built with Express.js and PostgreSQL.
+>>>>>>> bd3c517 (docs: translate backend README.md to English)
 
 ## Tech Stack
 
@@ -10,8 +14,8 @@ REST API for booking system futsal realtime with Express.js dan PostgreSQL.
 - **Framework**: Express.js
 - **Database**: PostgreSQL
 - **Authentication**: OAuth 2.0 / OpenID Connect (self-hosted), JWT
-- **Authorization**: RBAC dengan granular permissions
-- **Realtime**: Server-Sent Events (SSE)
+- **Authorization**: RBAC with granular permissions
+- **Real-time**: Server-Sent Events (SSE)
 
 ## Quick Start
 
@@ -29,19 +33,19 @@ npm install
 # Copy environment file
 cp .env.example .env
 
-# Edit .env dengan konfigurasi database Anda
+# Edit .env with your database configuration
 ```
 
 ### Database Setup
 
 ```bash
-# Jalankan DATABASE.sql untuk membuat schema dasar
+# Run DATABASE.sql to create the base schema
 psql -U postgres -d futsal_booking -f DATABASE.sql
 
-# Jalankan migration untuk tabel tambahan
+# Run migration for additional tables
 npm run db:migrate
 
-# Seed data awal (roles, permissions, admin, sample data)
+# Seed initial data (roles, permissions, admin, sample data)
 npm run db:seed
 ```
 
@@ -55,7 +59,7 @@ npm run dev
 npm start
 ```
 
-Server berjalan di `http://localhost:3000`
+Server runs at `http://localhost:3000`
 
 ## API Endpoints
 
@@ -63,13 +67,13 @@ Server berjalan di `http://localhost:3000`
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| POST | `/register` | Register user baru | - |
-| POST | `/login` | Login dengan phone & password | - |
+| POST | `/register` | Register new user | - |
+| POST | `/login` | Login with phone & password | - |
 | POST | `/refresh` | Refresh access token | - |
 | POST | `/logout` | Logout (revoke refresh token) | - |
-| POST | `/logout-all` | Logout dari semua device | ✓ |
-| POST | `/change-password` | Ganti password | ✓ |
-| GET | `/me` | Get profile user | ✓ |
+| POST | `/logout-all` | Logout from all devices | ✓ |
+| POST | `/change-password` | Change password | ✓ |
+| GET | `/me` | Get user profile | ✓ |
 | GET | `/.well-known/openid-configuration` | OpenID Connect Discovery | - |
 | GET | `/userinfo` | OpenID Connect UserInfo | ✓ |
 
@@ -77,10 +81,10 @@ Server berjalan di `http://localhost:3000`
 
 | Method | Endpoint | Description | Auth | Permission |
 |--------|----------|-------------|------|------------|
-| GET | `/availability/:branchId?date=YYYY-MM-DD` | Cek ketersediaan slot | - | - |
-| POST | `/` | Buat booking baru | ✓ | booking:create |
-| GET | `/` | List booking user | ✓ | booking:read |
-| GET | `/:bookingId` | Detail booking | ✓ | booking:read |
+| GET | `/availability/:branchId?date=YYYY-MM-DD` | Check slot availability | - | - |
+| POST | `/` | Create new booking | ✓ | booking:create |
+| GET | `/` | List user bookings | ✓ | booking:read |
+| GET | `/:bookingId` | Booking detail | ✓ | booking:read |
 | DELETE | `/:bookingId` | Cancel booking (LOCKED only) | ✓ | booking:cancel |
 | POST | `/:bookingId/reschedule` | Reschedule booking | ✓ | booking:reschedule |
 
@@ -90,7 +94,7 @@ Server berjalan di `http://localhost:3000`
 |--------|----------|-------------|------|------------|
 | POST | `/:bookingId/initiate` | Initiate payment | ✓ | payment:read |
 | GET | `/` | List payment history | ✓ | payment:read |
-| GET | `/:paymentId` | Detail payment | ✓ | payment:read |
+| GET | `/:paymentId` | Payment detail | ✓ | payment:read |
 | POST | `/webhook` | Payment gateway webhook | - | - |
 
 ### Memberships (`/api/memberships`)
@@ -98,28 +102,28 @@ Server berjalan di `http://localhost:3000`
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
 | GET | `/` | List membership types | - |
-| GET | `/:membershipId` | Detail membership type | - |
-| GET | `/my/active` | Membership aktif user | ✓ |
-| GET | `/my/history` | Histori membership | ✓ |
-| GET | `/my/payments` | Histori pembayaran membership | ✓ |
-| POST | `/:membershipId/purchase` | Beli membership | ✓ |
+| GET | `/:membershipId` | Membership type detail | - |
+| GET | `/my/active` | Active user membership | ✓ |
+| GET | `/my/history` | Membership history | ✓ |
+| GET | `/my/payments` | Membership payment history | ✓ |
+| POST | `/:membershipId/purchase` | Purchase membership | ✓ |
 
 ### Promos (`/api/promos`)
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| GET | `/` | List promo aktif | - |
-| POST | `/validate` | Validasi kode promo | ✓ |
+| GET | `/` | List active promos | - |
+| POST | `/validate` | Validate promo code | ✓ |
 
-### Realtime (`/api/realtime`)
+### Real-time (`/api/realtime`)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/availability?branchId=xxx` | SSE stream untuk update ketersediaan |
+| GET | `/availability?branchId=xxx` | SSE stream for availability updates |
 
 ### Admin (`/api/admin`)
 
-Semua endpoint admin memerlukan role ADMIN.
+All admin endpoints require the ADMIN role.
 
 | Method | Endpoint | Description | Permission |
 |--------|----------|-------------|------------|
@@ -132,55 +136,55 @@ Semua endpoint admin memerlukan role ADMIN.
 | GET | `/users/:userId` | User detail | admin:users |
 | POST | `/users/:userId/roles` | Assign role | admin:users |
 | DELETE | `/users/:userId/roles/:roleId` | Remove role | admin:users |
-| GET | `/bookings` | List semua booking | booking:read:all |
-| GET | `/payments` | List semua payment | payment:read:all |
+| GET | `/bookings` | List all bookings | booking:read:all |
+| GET | `/payments` | List all payments | payment:read:all |
 | GET/POST/PUT/DELETE | `/promos/*` | Manage promos | promo:* |
 
 ## Booking Flow
 
 ```
-1. User cek availability
+1. User checks availability
    GET /api/bookings/availability/:branchId?date=2024-01-20
 
-2. User pilih slot & create booking
+2. User selects slot & creates booking
    POST /api/bookings
    Body: { branchId, fieldId, slotId, bookingDate, promoCode? }
-   → Status: LOCKED (10 menit timeout)
+   → Status: LOCKED (10-minute timeout)
 
-3. User initiate payment
+3. User initiates payment
    POST /api/payments/:bookingId/initiate
    → Status: PENDING_PAYMENT
    → Return: paymentUrl
 
-4. User bayar di payment gateway
-   → Gateway kirim webhook
+4. User pays at the payment gateway
+   → Gateway sends webhook
 
-5. Webhook handler update status
+5. Webhook handler updates status
    POST /api/payments/webhook
    → Status: CONFIRMED
 
 6. (Optional) Reschedule
    POST /api/bookings/:bookingId/reschedule
    Body: { newSlotId, newBookingDate }
-   → Max 1x, 2 jam sebelum main
+   → Max 1x, 2 hours before playing
    → Status: RESCHEDULED
 ```
 
 ## Pricing Calculation
 
 ```
-Urutan:
-1. Base Price (dari slot_pricing berdasarkan field, slot, day_type)
-2. Membership Discount (jika ada membership aktif)
-3. Promo Discount (jika pakai kode promo)
+Order:
+1. Base Price (from slot_pricing based on field, slot, day_type)
+2. Membership Discount (if there is an active membership)
+3. Promo Discount (if using a promo code)
 
 Final Price = Base - Membership Discount - Promo Discount
-DP Amount = 50% × Final Price
+Down Payment (DP) Amount = 50% × Final Price
 ```
 
-## Realtime Updates (SSE)
+## Real-time Updates (SSE)
 
-Frontend dapat subscribe ke SSE untuk mendapatkan update realtime:
+Frontend can subscribe to SSE to get real-time updates:
 
 ```javascript
 const eventSource = new EventSource('/api/realtime/availability?branchId=xxx');
@@ -264,31 +268,31 @@ src/
 
 ## Test Credentials
 
-Setelah menjalankan `npm run db:seed`:
+After running `npm run db:seed`:
 
 - **Admin**: `08001234567` / `Admin123!`
 
 ## Security Features
 
 - JWT access + refresh token
-- RBAC dengan permissions dari database
+- RBAC with permissions from database
 - Webhook signature verification
-- Password hashing dengan bcrypt
+- Password hashing with bcrypt
 - Helmet security headers
 - CORS configuration
-- Input validation dengan express-validator
+- Input validation with express-validator
 - SQL injection prevention (parameterized queries)
 
 ## Business Rules
 
-1. **Double Booking Prevention**: Database constraint pada `(field_id, slot_id, booking_date)` untuk status LOCKED, PENDING_PAYMENT, CONFIRMED
+1. **Double Booking Prevention**: Database constraint on `(field_id, slot_id, booking_date)` for statuses LOCKED, PENDING_PAYMENT, CONFIRMED
 
-2. **Slot Locking**: Slot di-lock saat user klik booking, timeout 10 menit
+2. **Slot Locking**: Slot is locked when user clicks booking, 10-minute timeout
 
-3. **Reschedule**: Maksimal 1x, minimal 2 jam sebelum jadwal main, harga tidak berubah
+3. **Reschedule**: Maximum 1x, minimum 2 hours before playing time, price remains unchanged
 
-4. **Promo**: Hanya bisa dipakai 1x per user
+4. **Promo**: Can only be used once per user
 
-5. **Membership**: 1 membership aktif per user, discount applied sebelum promo
+5. **Membership**: 1 active membership per user, discount applied before promo
 
-6. **Payment**: DP 50%, non-refundable
+6. **Payment**: 50% DP, non-refundable
