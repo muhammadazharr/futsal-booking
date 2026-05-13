@@ -2,7 +2,7 @@
 This document is the authoritative source of truth for backend API behavior.
 Any generated code must strictly follow the rules defined here.
 
-REST API untuk sistem booking futsal realtime dengan Express.js dan PostgreSQL.
+REST API for booking system futsal realtime with Express.js dan PostgreSQL.
 
 ## Tech Stack
 
