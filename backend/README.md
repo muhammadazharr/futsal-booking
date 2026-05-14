@@ -2,11 +2,7 @@
 This document is the authoritative source of truth for backend API behavior.
 Any generated code must strictly follow the rules defined here.
 
-<<<<<<< HEAD
-REST API for booking system futsal realtime with Express.js dan PostgreSQL.
-=======
 REST API for a real-time futsal booking system built with Express.js and PostgreSQL.
->>>>>>> bd3c517 (docs: translate backend README.md to English)
 
 ## Tech Stack
 

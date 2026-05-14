@@ -99,9 +99,21 @@ export function parseErrorMessage(error: unknown): string {
   
   if (typeof error === 'object' && error !== null) {
     const err = error as Record<string, unknown>;
+    
+    // Handle backend response { success: false, message: "...", errors: [...] }
     if (typeof err.message === 'string') {
       return err.message;
     }
+    
+    // Handle validation errors array [{ field: "...", message: "..." }]
+    if (Array.isArray(err.errors) && err.errors.length > 0) {
+      const firstError = err.errors[0];
+      if (typeof firstError === 'object' && firstError !== null && 'message' in firstError) {
+        return (firstError as { message: string }).message;
+      }
+    }
+
+    // Handle legacy record format
     if (err.errors && typeof err.errors === 'object') {
       const errors = err.errors as Record<string, string[]>;
       const firstError = Object.values(errors)[0];

@@ -82,7 +82,7 @@ const authController = {
   async getProfile(req, res, next) {
     try {
       return successResponse(res, {
-        userId: req.user.user_id,
+        userId: req.user.userId,
         name: req.user.name,
         email: req.user.email,
         phone: req.user.phone,

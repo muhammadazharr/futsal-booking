@@ -78,20 +78,25 @@ const validators = {
       .normalizeEmail();
   },
 
-  // Phone
+  /**
+   * Phone number validator
+   * Supports Indonesian and international formats
+   */
   phone: (field = 'phone', required = true) => {
     const validator = body(field).trim();
+    const phoneRegex = /^(\+62|62|0)8[1-9][0-9]{7,11}$/;
+    
     if (required) {
       return validator
         .notEmpty()
         .withMessage('Phone is required')
-        .matches(/^[0-9+\-\s()]{8,20}$/)
-        .withMessage('Invalid phone format');
+        .matches(phoneRegex)
+        .withMessage('Invalid phone format (e.g., 081234567890)');
     }
     return validator
       .optional()
-      .matches(/^[0-9+\-\s()]{8,20}$/)
-      .withMessage('Invalid phone format');
+      .matches(phoneRegex)
+      .withMessage('Invalid phone format (e.g., 081234567890)');
   },
 
   // Password
