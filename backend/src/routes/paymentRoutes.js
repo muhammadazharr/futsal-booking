@@ -5,14 +5,40 @@ const { authenticate, requirePermission } = require('../middlewares/auth');
 const { validate, validators } = require('../middlewares/validate');
 const { PERMISSIONS } = require('../config/constants');
 
-// Webhook route (no auth - verified by signature)
-// Note: This must use raw body parser, configured in index.js
+/**
+ * @openapi
+ * /api/payments/webhook:
+ *   post:
+ *     summary: Webhook untuk menerima notifikasi pembayaran dari provider
+ *     tags: [Payment]
+ *     responses:
+ *       200:
+ *         description: Webhook berhasil diproses
+ */
 router.post('/webhook', paymentController.handleWebhook);
 
 // Protected routes
 router.use(authenticate);
 
-// Initiate payment
+/**
+ * @openapi
+ * /api/payments/{bookingId}/initiate:
+ *   post:
+ *     summary: Inisiasi pembayaran untuk pesanan tertentu
+ *     tags: [Payment]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: bookingId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Pembayaran berhasil diinisiasi
+ */
 router.post(
   '/:bookingId/initiate',
   validate([validators.uuid('bookingId')]),

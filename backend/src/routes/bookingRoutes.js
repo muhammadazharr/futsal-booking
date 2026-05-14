@@ -29,10 +29,41 @@ const availabilityValidation = [
     .withMessage('Invalid date format')
 ];
 
-// Public route - get list of active branches
+/**
+ * @openapi
+ * /api/bookings/branches:
+ *   get:
+ *     summary: Mendapatkan daftar cabang futsal
+ *     tags: [Booking]
+ *     responses:
+ *       200:
+ *         description: Berhasil mengambil daftar cabang
+ */
 router.get('/branches', bookingController.getBranches);
 
-// Public route - get availability (no auth required but optional for pricing)
+/**
+ * @openapi
+ * /api/bookings/availability/{branchId}:
+ *   get:
+ *     summary: Cek ketersediaan lapangan berdasarkan cabang dan tanggal
+ *     tags: [Booking]
+ *     parameters:
+ *       - in: path
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: query
+ *         name: date
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: Berhasil mengambil data ketersediaan
+ */
 router.get(
   '/availability/:branchId',
   validate(availabilityValidation),
@@ -43,7 +74,31 @@ router.get(
 // Protected routes
 router.use(authenticate);
 
-// Create booking
+/**
+ * @openapi
+ * /api/bookings:
+ *   post:
+ *     summary: Membuat pesanan (booking) lapangan baru
+ *     tags: [Booking]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [branchId, fieldId, slotId, bookingDate]
+ *             properties:
+ *               branchId: { type: string, format: uuid }
+ *               fieldId: { type: string, format: uuid }
+ *               slotId: { type: string, format: uuid }
+ *               bookingDate: { type: string, format: date }
+ *               promoCode: { type: string }
+ *     responses:
+ *       201:
+ *         description: Booking berhasil dibuat
+ */
 router.post(
   '/',
   requirePermission(PERMISSIONS.BOOKING_CREATE),
@@ -51,7 +106,18 @@ router.post(
   bookingController.createBooking
 );
 
-// Get user's bookings
+/**
+ * @openapi
+ * /api/bookings:
+ *   get:
+ *     summary: Mendapatkan daftar booking user saat ini
+ *     tags: [Booking]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Berhasil mengambil daftar booking
+ */
 router.get(
   '/',
   requirePermission(PERMISSIONS.BOOKING_READ),

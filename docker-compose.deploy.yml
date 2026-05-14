@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ghcr.io/${YOUR_GITHUB_USERNAME}/${REPO_NAME}-backend:latest
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      # Tambahkan env lain yang dibutuhkan
+    ports:
+      - "3000:3000"
+
+  frontend:
+    image: ghcr.io/${YOUR_GITHUB_USERNAME}/${REPO_NAME}-frontend:latest
+    restart: always
+    ports:
+      - "80:80"
+
+  # Watchtower akan mengecek update image setiap 5 menit
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300 --cleanup

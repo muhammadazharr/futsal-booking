@@ -9,20 +9,27 @@
     "db:migrate": "node src/database/migrate.js",
     "db:seed": "node src/database/seed.js"
   },
-  "keywords": ["futsal", "booking", "realtime", "api"],
+  "keywords": [
+    "futsal",
+    "booking",
+    "realtime",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "pg": "^8.11.3",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "uuid": "^9.0.1",
-    "dotenv": "^16.3.1",
     "cors": "^2.8.5",
-    "helmet": "^7.1.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "express-validator": "^7.0.1",
-    "crypto": "^1.0.1"
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

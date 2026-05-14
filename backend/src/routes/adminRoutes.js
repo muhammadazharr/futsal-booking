@@ -13,12 +13,36 @@ router.use(authenticate);
 router.use(requireRole(ROLES.ADMIN));
 
 // ============ DASHBOARD ============
+/**
+ * @openapi
+ * /api/admin/dashboard:
+ *   get:
+ *     summary: Mendapatkan data statistik dashboard admin
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Berhasil mengambil data dashboard
+ */
 router.get('/dashboard', 
   requirePermission(PERMISSIONS.ADMIN_DASHBOARD),
   adminController.getDashboard
 );
 
 // ============ BRANCHES ============
+/**
+ * @openapi
+ * /api/admin/branches:
+ *   get:
+ *     summary: Mendapatkan semua daftar cabang (Admin View)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Berhasil mengambil daftar cabang
+ */
 router.get('/branches', 
   requirePermission(PERMISSIONS.ADMIN_BRANCHES),
   adminController.getBranches

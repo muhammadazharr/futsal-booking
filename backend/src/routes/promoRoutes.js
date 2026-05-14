@@ -18,13 +18,45 @@ const validatePromoValidation = [
   body('code').trim().notEmpty().withMessage('Promo code is required')
 ];
 
-// Public routes
+/**
+ * @openapi
+ * /api/promos:
+ *   get:
+ *     summary: Mendapatkan daftar promo yang sedang aktif
+ *     tags: [Promo]
+ *     responses:
+ *       200:
+ *         description: Berhasil mengambil daftar promo
+ */
 router.get('/', promoController.getActivePromos);
 
 // Protected routes
 router.use(authenticate);
 
-// Validate promo code
+/**
+ * @openapi
+ * /api/promos/validate:
+ *   post:
+ *     summary: Validasi kode promo
+ *     tags: [Promo]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [code]
+ *             properties:
+ *               code:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Kode promo valid
+ *       400:
+ *         description: Kode promo tidak valid atau kadaluarsa
+ */
 router.post(
   '/validate',
   validate(validatePromoValidation),

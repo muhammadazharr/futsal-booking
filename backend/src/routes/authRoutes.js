@@ -26,18 +26,109 @@ const changePasswordValidation = [
   validators.password('newPassword')
 ];
 
-// Public routes
+/**
+ * @openapi
+ * /api/auth/register:
+ *   post:
+ *     summary: Registrasi user baru
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, phone, password]
+ *             properties:
+ *               name:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User berhasil terdaftar
+ *       400:
+ *         description: Validasi gagal
+ */
 router.post('/register', validate(registerValidation), authController.register);
+
+/**
+ * @openapi
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [phone, password]
+ *             properties:
+ *               phone:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login berhasil
+ *       401:
+ *         description: Phone atau password salah
+ */
 router.post('/login', validate(loginValidation), authController.login);
+/**
+ * @openapi
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token berhasil diperbarui
+ */
 router.post('/refresh', validate(refreshValidation), authController.refreshToken);
 
-// OpenID Connect endpoints
-router.get('/.well-known/openid-configuration', authController.openidConfiguration);
-
-// Protected routes
+/**
+ * @openapi
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout dari sesi saat ini
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout berhasil
+ */
 router.post('/logout', authController.logout);
-router.post('/logout-all', authenticate, authController.logoutAll);
-router.post('/change-password', authenticate, validate(changePasswordValidation), authController.changePassword);
+
+/**
+ * @openapi
+ * /api/auth/me:
+ *   get:
+ *     summary: Mendapatkan profil user yang sedang login
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Data profil berhasil diambil
+ */
 router.get('/me', authenticate, authController.getProfile);
 router.get('/userinfo', authenticate, authController.userInfo);
 

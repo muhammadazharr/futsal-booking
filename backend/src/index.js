@@ -5,6 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { pool } = require('./config/database');
 const routes = require('./routes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 const { errorHandler } = require('./middlewares/errorHandler');
 const { sseManager } = require('./services/sse/sseManager');
 
@@ -12,11 +14,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false, // Nonaktifkan CSP sementara agar Swagger UI bisa tampil tanpa masalah resource
+}));
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
 }));
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Parse JSON - except for webhook which needs raw body
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
